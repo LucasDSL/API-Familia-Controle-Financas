@@ -48,6 +48,19 @@ class ReceitasController {
       next(error)
     }
   }
+
+  static async deletarReceita(req, res, next) {
+    const { id } = req.params
+    try {
+      const itemDeletado = await ModelReceitas.destroy({ where: { id: id } })
+      if(itemDeletado) {
+        res.status(204).end()
+      }
+      throw new NenhumItemEncontrado()
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = ReceitasController
