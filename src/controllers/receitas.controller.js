@@ -11,7 +11,7 @@ class ReceitasController {
         }
       })
       const receitaAdicionada = await ModelReceitas.create(novaReceita)
-      res.status(201).send(novaPessoa)
+      res.status(201).send(receitaAdicionada)
     } catch (error) {
       return next(error)
     }
