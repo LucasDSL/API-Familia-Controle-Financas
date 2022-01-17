@@ -1,9 +1,7 @@
 const CampoNaoEncontrado = require("../errors/campoNaoEncontrado")
 const NenhumItemEncontrado = require("../errors/nenhumItemEncontrado")
 const CampoInvalido = require("../errors/campoInvalido")
-const CampoJaCadastrado = require("../errors/campoJaCadastrado")
 const ModelReceitas = require("../models").Receitas
-const { Op } = require("sequelize")
 class ReceitasController {
   static async cadastrarReceita(req, res, next) {
     const novaReceita = req.body
@@ -81,19 +79,6 @@ class ReceitasController {
         res.status(204)
       }
       throw new NenhumItemEncontrado()
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  static async itemExistente(params) {
-    try {
-      const item = await ModelReceitas.findAll({
-        where: {
-          [Op.or]: [...params],
-        },
-      })
-      return item
     } catch (error) {
       next(error)
     }

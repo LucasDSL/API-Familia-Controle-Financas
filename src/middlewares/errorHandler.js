@@ -4,7 +4,10 @@ module.exports = (erro, req, res, next) => {
   if (erro instanceof Errors.CampoNaoEncontrado) {
     status = 400
   }
-  if (erro instanceof Errors.NenhumItemEncontrado) {
+  if (
+    erro instanceof Errors.NenhumItemEncontrado ||
+    erro instanceof Errors.CampoInvalido
+  ) {
     status = 404
   }
   res.status(status).send({
