@@ -1,1 +1,1 @@
-# API-Family-Finance-Control
+# API para controle financeiro de uma família.
