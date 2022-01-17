@@ -4,6 +4,8 @@
   "description": "API para controle de finanças de um ambiente familiar.",
   "main": "src/server.js",
   "scripts": {
+    "start": "nodemon src/server.js",
+    "scli": "npx sequelize-cli",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
