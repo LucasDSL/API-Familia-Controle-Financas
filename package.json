@@ -1,0 +1,45 @@
+{
+  "name": "api-familia-controle-financas",
+  "version": "1.0.0",
+  "description": "API para controle de finanças de um ambiente familiar.",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasDSL/API-Familia-Controle-Financas.git"
+  },
+  "keywords": [
+    "API",
+    "backend",
+    "alura",
+    "LucasDSL",
+    "github",
+    "code",
+    "API-rest",
+    "REST"
+  ],
+  "author": "https://github.com/LucasDSL",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LucasDSL/API-Familia-Controle-Financas/issues"
+  },
+  "homepage": "https://github.com/LucasDSL/API-Familia-Controle-Financas#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^14.1.0",
+    "express": "^4.17.2",
+    "mysql2": "^2.3.3",
+    "path": "^0.12.7",
+    "sequelize": "^6.13.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.7.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.1",
+    "sequelize-cli": "^6.4.1"
+  }
+}
