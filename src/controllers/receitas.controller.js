@@ -20,14 +20,30 @@ class ReceitasController {
 
   static async listarReceitas(req, res, next) {
     try {
-      const camposObrigatorios = ["id", "descricao", "valor", "data"]
+      const camposBusca = ["id", "descricao", "valor", "data"]
       let receitas = await ModelReceitas.findAll({
-        attributes: camposObrigatorios,
+        attributes: camposBusca,
       })
       if (receitas.length === 0) {
         throw new NenhumItemEncontrado()
       }
-      res.send(receitas)
+      res.status(200).json(receitas)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async pegarReceita(req, res, next) {
+    const { id } = req.params
+    try {
+      const receita = await ModelReceitas.findOne({
+        where: { id: id },
+        attributes: ["id", "descricao", "valor", "data"],
+      })
+      if (!receita) {
+        throw new NenhumItemEncontrado()
+      }
+      res.status(200).json(receita)
     } catch (error) {
       next(error)
     }
