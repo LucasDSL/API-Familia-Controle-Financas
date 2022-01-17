@@ -1,6 +1,9 @@
 const CampoNaoEncontrado = require("../errors/campoNaoEncontrado")
 const NenhumItemEncontrado = require("../errors/nenhumItemEncontrado")
+const CampoInvalido = require("../errors/campoInvalido")
+const CampoJaCadastrado = require("../errors/campoJaCadastrado")
 const ModelReceitas = require("../models").Receitas
+const { Op } = require("sequelize")
 class ReceitasController {
   static async cadastrarReceita(req, res, next) {
     const novaReceita = req.body
@@ -53,10 +56,44 @@ class ReceitasController {
     const { id } = req.params
     try {
       const itemDeletado = await ModelReceitas.destroy({ where: { id: id } })
-      if(itemDeletado) {
+      if (itemDeletado) {
         res.status(204).end()
       }
       throw new NenhumItemEncontrado()
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async atualizarReceita(req, res, next) {
+    const { id } = req.params
+    const novosCampos = req.body
+    const atributosNovoObjeto = Object.keys(novosCampos)
+    const camposAtualizar = ["descricao", "valor", "data"]
+    try {
+      atributosNovoObjeto.forEach((campo) => {
+        if (camposAtualizar.indexOf(campo) === -1) {
+          throw new CampoInvalido(campo)
+        }
+      })
+      const resultadoAtualizacao = await ModelReceitas.update(novosCampos, { where: { id: id } })
+      if(resultadoAtualizacao) {
+        res.status(204)
+      }
+      throw new NenhumItemEncontrado()
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async itemExistente(params) {
+    try {
+      const item = await ModelReceitas.findAll({
+        where: {
+          [Op.or]: [...params],
+        },
+      })
+      return item
     } catch (error) {
       next(error)
     }
