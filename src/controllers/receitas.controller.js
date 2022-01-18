@@ -13,7 +13,7 @@ class ReceitasController {
         }
       })
       const receitaAdicionada = await ModelReceitas.create(novaReceita)
-      res.status(201).send(receitaAdicionada)
+      return res.status(201).send(receitaAdicionada)
     } catch (error) {
       return next(error)
     }
@@ -28,9 +28,9 @@ class ReceitasController {
       if (receitas.length === 0) {
         throw new NenhumItemEncontrado()
       }
-      res.status(200).json(receitas)
+      return res.status(200).json(receitas)
     } catch (error) {
-      next(error)
+      return next(error)
     }
   }
 
@@ -44,9 +44,9 @@ class ReceitasController {
       if (!receita) {
         throw new NenhumItemEncontrado()
       }
-      res.status(200).json(receita)
+      return res.status(200).json(receita)
     } catch (error) {
-      next(error)
+      return next(error)
     }
   }
 
@@ -55,11 +55,11 @@ class ReceitasController {
     try {
       const itemDeletado = await ModelReceitas.destroy({ where: { id: id } })
       if (itemDeletado) {
-        res.status(204).end()
+        return res.status(204).end()
       }
       throw new NenhumItemEncontrado()
     } catch (error) {
-      next(error)
+      return next(error)
     }
   }
 
@@ -74,13 +74,15 @@ class ReceitasController {
           throw new CampoInvalido(campo)
         }
       })
-      const resultadoAtualizacao = await ModelReceitas.update(novosCampos, { where: { id: id } })
-      if(resultadoAtualizacao) {
-        res.status(204)
+      const resultadoAtualizacao = await ModelReceitas.update(novosCampos, {
+        where: { id: id },
+      })
+      if (resultadoAtualizacao) {
+        return res.status(204)
       }
       throw new NenhumItemEncontrado()
     } catch (error) {
-      next(error)
+      return next(error)
     }
   }
 }
