@@ -1,7 +1,10 @@
 const Errors = require("../errors")
 module.exports = (erro, req, res, next) => {
   let status = 500
-  if (erro instanceof Errors.CampoNaoEncontrado) {
+  if (
+    erro instanceof Errors.CampoNaoEncontrado ||
+    erro instanceof Errors.ItemJaCadastrado
+  ) {
     status = 400
   }
   if (
@@ -10,7 +13,7 @@ module.exports = (erro, req, res, next) => {
   ) {
     status = 404
   }
-  res.status(status).send({
+  res.status(status).json({
     id: erro.id,
     nomeErro: erro.name,
     mensagem: erro.message,

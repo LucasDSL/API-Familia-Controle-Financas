@@ -1,7 +1,7 @@
 const CampoNaoEncontrado = require("../errors/campoNaoEncontrado")
 const NenhumItemEncontrado = require("../errors/nenhumItemEncontrado")
 const CampoInvalido = require("../errors/campoInvalido")
-const ReceitaJaCadastrada = require("../errors/receitaJaCadastrada")
+const ItemJaCadastrado = require("../errors/itemJaCadastrada")
 const ModelReceitas = require("../models").Receitas
 class ReceitasController {
   static async cadastrarReceita(req, res, next) {
@@ -24,7 +24,7 @@ class ReceitasController {
           mesReceita === mesReceitaAdicionar &&
           descricaoReceita === descricaoReceitaAdicionar
         ) {
-          throw new ReceitaJaCadastrada()
+          throw new ItemJaCadastrado()
         }
       })
       const receitaAdicionada = await ModelReceitas.create(novaReceita)
@@ -37,11 +37,9 @@ class ReceitasController {
   static async listarReceitas(req, res, next) {
     try {
       const camposBusca = ["id", "descricao", "valor", "data"]
-      let receitas = await ModelReceitas.findAll({
+      const receitas = await ModelReceitas.findAll({
         attributes: camposBusca,
       })
-      const data = new Date(receitas[0].data).getMonth() + 1
-      console.log(data)
       if (receitas.length === 0) {
         throw new NenhumItemEncontrado()
       }
@@ -95,7 +93,7 @@ class ReceitasController {
         where: { id: id },
       })
       if (resultadoAtualizacao) {
-        return res.status(204)
+        return res.status(204).end()
       }
       throw new NenhumItemEncontrado()
     } catch (error) {
