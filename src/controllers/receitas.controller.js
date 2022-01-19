@@ -93,7 +93,7 @@ class ReceitasController {
         where: { id: id },
       })
       if (resultadoAtualizacao) {
-        return res.status(204)
+        return res.status(204).end()
       }
       throw new NenhumItemEncontrado()
     } catch (error) {
