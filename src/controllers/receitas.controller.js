@@ -100,6 +100,30 @@ class ReceitasController {
       return next(error)
     }
   }
+
+  static async listaMes(req, res, next) {
+    const { ano, mes } = req.params
+    console.log(ano, mes)
+    const receitasMesAno = []
+    try {
+      const camposBusca = ["id", "descricao", "valor", "data"]
+      const receitas = await ModelReceitas.findAll({ attributes: camposBusca })
+      if (!receitas) {
+        throw new NenhumItemEncontrado()
+      }
+      receitas.forEach((receita) => {
+        const mesReceita = new Date(receita.data).getMonth() + 1
+        const anoReceita = new Date(receita.data).getFullYear()
+        if (mesReceita === Number(mes) && anoReceita === Number(ano)) {
+          receitasMesAno.push(receita)
+        }
+      })
+
+      return res.status(200).json(receitasMesAno)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = ReceitasController
