@@ -7,6 +7,7 @@ const tableDespesas = require("../models").Despesas
 class DespesasController {
   static async listarDespesas(req, res, next) {
     try {
+      const parametros = req.query
       const camposBusca = ["id", "descricao", "valor", "data"]
       const despesas = await tableDespesas.findAll({
         attributes: camposBusca,
@@ -15,6 +16,25 @@ class DespesasController {
       if (despesas.length === 0) {
         throw new NenhumItemEncontrado()
       }
+
+      if (parametros["descricao"]) {
+        const palavraEncontrar = parametros["descricao"]
+        const despesasEncontradas = []
+        despesas.forEach((despesa) => {
+          const descricaoPorPalavra = despesa["descricao"].split(" ")
+          if (descricaoPorPalavra.indexOf(palavraEncontrar) !== -1) {
+            despesasEncontradas.push(despesa)
+          }
+        })
+
+        return res
+          .status(200)
+          .json({
+            Palavra: palavraEncontrar,
+            despesasEncontradas: despesasEncontradas,
+          })
+      }
+
       return res.status(200).json(despesas)
     } catch (error) {
       return next(error)
