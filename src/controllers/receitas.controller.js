@@ -44,7 +44,7 @@ class ReceitasController {
       if (receitas.length === 0) {
         throw new NenhumItemEncontrado()
       }
-      if (parametros) {
+      if (parametros["descricao"]) {
         const palavraEncontrar = parametros["descricao"]
         const receitasEncontradas = []
         receitas.forEach((receita) => {
