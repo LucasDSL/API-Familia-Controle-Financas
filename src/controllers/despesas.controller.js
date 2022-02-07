@@ -139,6 +139,31 @@ class DespesasController {
       return next(error)
     }
   }
+
+  static async listaMes(req, res, next) {
+    const { ano, mes } = req.params
+    const despesasMesAno = []
+    try {
+      const camposBusca = ["id", "descricao", "valor", "data", "categoria"]
+      const despesas = await tableDespesas.findAll({ attributes: camposBusca })
+      if (!despesas) {
+        throw new NenhumItemEncontrado()
+      }
+      despesas.forEach((despesa) => {
+        console.log(despesa.data)
+        const mesDespesa = new Date(despesa.data).getMonth() + 1
+        const anoDespesa = new Date(despesa.data).getFullYear()
+        console.log(mesDespesa, anoDespesa)
+        if (mesDespesa === Number(mes) && anoDespesa === Number(ano)) {
+          despesasMesAno.push(despesa)
+        }
+      })
+
+      return res.status(200).json(despesasMesAno)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = DespesasController
