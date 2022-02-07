@@ -36,6 +36,7 @@ class ReceitasController {
 
   static async listarReceitas(req, res, next) {
     try {
+      const parametros = req.query
       const camposBusca = ["id", "descricao", "valor", "data"]
       const receitas = await ModelReceitas.findAll({
         attributes: camposBusca,
@@ -43,6 +44,24 @@ class ReceitasController {
       if (receitas.length === 0) {
         throw new NenhumItemEncontrado()
       }
+      if (parametros) {
+        const palavraEncontrar = parametros["descricao"]
+        const receitasEncontradas = []
+        receitas.forEach((receita) => {
+          const descricaoPorPalavra = receita["descricao"].split(" ")
+          if (descricaoPorPalavra.indexOf(palavraEncontrar) !== -1) {
+            receitasEncontradas.push(receita)
+          }
+        })
+
+        return res
+          .status(200)
+          .json({
+            Palavra: palavraEncontrar,
+            receitasEncontradas: receitasEncontradas,
+          })
+      }
+
       return res.status(200).json(receitas)
     } catch (error) {
       return next(error)
