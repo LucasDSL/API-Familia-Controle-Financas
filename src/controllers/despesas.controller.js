@@ -2,6 +2,7 @@ const CampoNaoEncontrado = require("../errors/campoNaoEncontrado")
 const NenhumItemEncontrado = require("../errors/nenhumItemEncontrado")
 const CampoInvalido = require("../errors/campoInvalido")
 const ItemJaCadastrado = require("../errors/itemJaCadastrada")
+const { CategoriaInvalida } = require("../errors")
 const tableDespesas = require("../models").Despesas
 
 class DespesasController {
@@ -27,12 +28,10 @@ class DespesasController {
           }
         })
 
-        return res
-          .status(200)
-          .json({
-            Palavra: palavraEncontrar,
-            despesasEncontradas: despesasEncontradas,
-          })
+        return res.status(200).json({
+          Palavra: palavraEncontrar,
+          despesasEncontradas: despesasEncontradas,
+        })
       }
 
       return res.status(200).json(despesas)
@@ -66,6 +65,24 @@ class DespesasController {
           throw new CampoNaoEncontrado(campo)
         }
       })
+      const categoria = novaDespesa["categoria"]
+      if (!categoria) {
+        novaDespesa["categoria"] = "Outras"
+      }
+      const possiveisCategorias = [
+        "Transporte",
+        "Saúde",
+        "Alimentação",
+        "Lazer",
+        "Imprevistos",
+        "Educação",
+        "Moradia",
+        "Outras",
+      ]
+
+      if (possiveisCategorias.indexOf(categoria) === -1) {
+        throw new CategoriaInvalida()
+      }
       const mesDespesaAdicionar = new Date(novaDespesa["data"]).getMonth() + 1
       const descricaoDespesaAdicionar = novaDespesa["descricao"]
 
